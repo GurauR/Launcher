@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_frame"
+    android:layout_margin="100dp">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:drawableLeft="@drawable/settings_48px"
+        android:textSize="20sp"
+        android:padding="15dp"
+        android:fontFamily="@font/lato_heavy"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:id="@+id/settingButton"
+        android:onClick="launchSettings"/>
+
+</LinearLayout>

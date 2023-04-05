@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/drawable/dock_frame.xml" value="0.287" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/drawable/ic_search.xml" value="0.18" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/drawable/rounded_frame.xml" value="0.3635" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/drawable/scrollbar.xml" value="0.1925" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/drawable/settings-48px.xml" value="0.3635" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/drawable/settings_48px.xml" value="0.1935" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/layout/activity_dock_apps.xml" value="0.1" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/layout/activity_settings.xml" value="0.2916666666666667" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/layout/dialog_layout.xml" value="0.11428571428571428" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/layout/fragment_drawer.xml" value="0.25" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/layout/list_item.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/layout/list_item_dock.xml" value="0.1" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/layout/my_menu.xml" value="0.2916666666666667" />
+        <entry key="..\:/Users/rober/StudioProjects/Launcher/app/src/main/res/menu/my_menu.xml" value="0.12760416666666666" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
