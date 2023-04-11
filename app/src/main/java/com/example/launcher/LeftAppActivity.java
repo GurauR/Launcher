@@ -1,56 +1,38 @@
 package com.example.launcher;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupMenu;
-import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class DockAppsActivity extends AppCompatActivity {
+public class LeftAppActivity extends AppCompatActivity {
 
     private static final String TAG = "Dock";
-    private DockAppsAdapter adapter;
+    private AppsAdapter adapter;
     private LinkedList<App> apps;
     private ListView appListView;
     private List<ApplicationInfo> packages;
@@ -58,19 +40,19 @@ public class DockAppsActivity extends AppCompatActivity {
     private PackageManager pm = null;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private LinkedHashSet<String> selected;
+    private String selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dock_apps);
+        setContentView(R.layout.activity_left_app);
         appListView = findViewById(R.id.app_list_view);
         pm = this.getPackageManager();
-        sharedPreferences = getSharedPreferences("appDock", MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        selected = loadLinkedHashSet("selected", this);
+        sharedPreferences = getSharedPreferences("leftApp", MODE_PRIVATE);
         refreshApps();
-        Log.d(TAG, "onCreate: " + Arrays.toString(selected.toArray()));
+        editor = sharedPreferences.edit();
+        selected= sharedPreferences.getString("selected", "");
+        Log.d(TAG, "onCreate: " + selected);
 
     }
 
@@ -87,7 +69,6 @@ public class DockAppsActivity extends AppCompatActivity {
                 CharSequence appName = pm.getApplicationLabel(appInfo);
                 Drawable appIcon = pm.getApplicationIcon(appInfo);
                 apps.add(new App(appName.toString(), appInfo.packageName, appIcon));
-                if (sharedPreferences.getAll().containsValue((String) pm.getApplicationLabel(appInfo))) selected.add((String) pm.getApplicationLabel(appInfo));
                 packagesName.add((String) pm.getApplicationLabel(appInfo));
             }
         }
@@ -108,72 +89,41 @@ public class DockAppsActivity extends AppCompatActivity {
 
         PackageManager packageManager = this.getPackageManager();
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.text_view, packagesName);
-        adapter = new DockAppsAdapter(this, apps, selected);
+        adapter = new AppsAdapter(this, apps);
         appListView.setAdapter(adapter);
         appListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String app = apps.get(position).packageName;
-                if (selected.contains(app)) {
-                    selected.remove(app);
-                    view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.darkGray));
-                } else if (selected.size() < 5) {
-                    selected.add(app);
-                    Log.d(TAG, "dockApps: " + Arrays.toString(selected.toArray()));
-                    Log.d(TAG, "onItemClick: " + position);
-                    view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.orange));
-                }
-
-                saveLinkedHashSet(selected, "selected", getBaseContext());
-                Log.d(TAG, "dockApps: " + Arrays.toString(selected.toArray()));
-
-
-                //adapter = new DockAppsAdapter(parent.getContext(), apps, (HashSet<String>) selected);
-                //appListView.setAdapter(adapter);
-
+                selected = app;
+                Log.d(TAG, "onItemClick: " + selected);
+                editor.putString("selected", selected);
+                editor.commit();
+                Log.d(TAG, "onItemClick: " + sharedPreferences.getString("selected", ""));
+                Log.d(TAG, "onItemClick: " + position);
+                view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.orange));
+                finish();
             }
         });
 
         Log.d(TAG, "refreshApps: " + apps);
     }
-
-    public boolean saveLinkedHashSet(LinkedHashSet<String> set, String setName, Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences("appDock", 0);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(setName + "_size", set.size());
-        int i = 0;
-        for (String element : set)
-            editor.putString(setName + "_" + i++, element);
-        return editor.commit();
-    }
-
-    public LinkedHashSet<String> loadLinkedHashSet(String setName, Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences("appDock", 0);
-        int size = prefs.getInt(setName + "_size", 0);
-        LinkedHashSet<String> set = new LinkedHashSet<>();
-        for (int i = 0; i < size; i++)
-            set.add(prefs.getString(setName + "_" + i, null));
-        return set;
-    }
-
 }
 
-class DockAppsAdapter extends ArrayAdapter<App> {
+class AppsAdapter extends ArrayAdapter<App> {
 
     private static final String TAG = "MyCustomAdapter";
     private final Context context;
     private final List<App> appList;
     private final List<App> apps;
     private Filter appFilter;
-    private Set<String> selected;
 
-    public DockAppsAdapter(Context context, List<App> apps, LinkedHashSet<String>selected) {
+    public AppsAdapter(Context context, List<App> apps) {
         super(context, R.layout.list_item, apps);
         this.context = context;
         this.appList = apps;
         this.apps = apps;
-        this.selected = selected;
         appFilter = new AppFilter();
     }
 
@@ -182,10 +132,7 @@ class DockAppsAdapter extends ArrayAdapter<App> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_item_dock, parent, false);
         //SharedPreferences sharedPreferences = view.getSharedPreferences("appDock", MODE_PRIVATE);
-        Log.d(TAG, "getView: " + selected + " " + appList.get(position).packageName);
         //Log.d(TAG, "getView: " + SharedPreferences.);
-        Log.d(TAG, "getView: " + selected.contains(appList.get(position).packageName));
-        if (selected != null && selected.contains(appList.get(position).packageName)) rowView.setBackgroundColor(ContextCompat.getColor(parent.getContext(), R.color.orange));
         TextView textView = rowView.findViewById(R.id.text_view);
         ImageView imageView = rowView.findViewById(R.id.icon);
         textView.setText(appList.get(position).name);

@@ -4,4 +4,5 @@
         <item name="queryBackground">@null</item>
         <item name="submitBackground">@null</item>
     </style>
+
 </resources>
